@@ -8,11 +8,11 @@ import today.opai.api.interfaces.modules.values.MultiBooleanValue;
 
 import static tech.Jiaxing.OpaiProExtension.openAPI;
 
-public class ModernScoreboard extends ExtensionModule implements EventHandler {
-    public static ModernScoreboard INSTANCE;
+public class ClassicalScoreboard extends ExtensionModule implements EventHandler {
+    public static ClassicalScoreboard INSTANCE;
     private boolean state;
-    public ModernScoreboard() {
-        super("ModernScoreboard", "A Modern scoreboard implementation", EnumModuleCategory.VISUAL);
+    public ClassicalScoreboard() {
+        super("ClassicalScoreboard", "A Classical scoreboard implementation", EnumModuleCategory.VISUAL);
         setEventHandler(this);
         INSTANCE = this;
     }

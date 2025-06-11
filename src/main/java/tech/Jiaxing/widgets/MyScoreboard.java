@@ -1,7 +1,7 @@
 package tech.Jiaxing.widgets;
 
 import today.opai.api.features.ExtensionWidget;
-import tech.Jiaxing.modules.ModernScoreboard;
+import tech.Jiaxing.modules.ClassicalScoreboard;
 
 import java.awt.*;
 
@@ -21,7 +21,7 @@ public class MyScoreboard extends ExtensionWidget {
         if(openAPI.getWorld().getScoreboardLines().isEmpty() || openAPI.getWorld().getScoreboardTitle() == null)
             return;
 
-        openAPI.getRenderUtil().drawRoundRect(getX(), getY(), getWidth(), getHeight(), 5, new Color(0, 0, 0, 150));
+        openAPI.getRenderUtil().drawRoundRect(getX(), getY(), getWidth(), getHeight(), 0, new Color(0, 0, 0, 100));
 
         height += 10;
 
@@ -30,14 +30,12 @@ public class MyScoreboard extends ExtensionWidget {
         renderWidth = openAPI.getFontUtil().getVanillaFont().getWidth("❁花雨庭❁");
 
         for (String s1 : openAPI.getWorld().getScoreboardLines()) {
-            String displayText = s1; // 初始化显示文本
-//            if (s1.contains("www.hypixel.net")) {
-//                displayText = s1.replace("www.hypixel.net", "布吉岛");
-//            }
-            if (s1.contains("HYPIXEL")) {
-                displayText = s1.replace("HYPIXEL", "SB"); // 替换特定字符串
+            String displayText = s1;
+            if (s1.contains("www.hypixel.net")) {
+                displayText = s1.replace("www.hypixel.net", "布吉岛");
             }
-            renderWidth = Math.max(openAPI.getFontUtil().getVanillaFont().getWidth(s1), renderWidth);
+
+            renderWidth = Math.max(openAPI.getFontUtil().getVanillaFont().getWidth(displayText), renderWidth);
             openAPI.getFontUtil().getVanillaFont().drawString(
                     s1,
                     getX() + 3,
@@ -52,6 +50,6 @@ public class MyScoreboard extends ExtensionWidget {
 
     @Override
     public boolean renderPredicate() {
-        return ModernScoreboard.INSTANCE.isEnabled();
+        return ClassicalScoreboard.INSTANCE.isEnabled();
     }
 }

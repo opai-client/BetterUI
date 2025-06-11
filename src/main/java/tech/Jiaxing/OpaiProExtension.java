@@ -6,14 +6,11 @@ import today.opai.api.OpenAPI;
 import today.opai.api.annotations.ExtensionInfo;
 import tech.Jiaxing.commands.BindsCommand;
 import tech.Jiaxing.widgets.MyScoreboard;
-import today.opai.api.interfaces.modules.PresetModule;
-import today.opai.api.interfaces.modules.Value;
-import today.opai.api.interfaces.modules.values.ColorValue;
 
 import java.awt.*;
 
 // Required @ExtensionInfo annotation
-@ExtensionInfo(name = "OpaiPro",author = "renjun",version = "0.2")
+@ExtensionInfo(name = "BasicUI",author = "renjun",version = "0.3")
 public class OpaiProExtension extends Extension {
     public static OpenAPI openAPI;
     public Color BaseColor;
@@ -25,8 +22,9 @@ public class OpaiProExtension extends Extension {
         openAPI.registerFeature(new BindsCommand());
 
         // Modules
-        openAPI.registerFeature(new ModernScoreboard());
+        openAPI.registerFeature(new ClassicalScoreboard());
         openAPI.registerFeature(new BasicUI());
+        openAPI.registerFeature(new classicalNameTags());
         // Widgets
         openAPI.registerFeature(new MyScoreboard());
 

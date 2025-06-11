@@ -2,12 +2,14 @@ package today.opai.api.features;
 
 import lombok.Getter;
 import lombok.Setter;
+import tech.Jiaxing.modules.BasicUI;
 import today.opai.api.enums.EnumModuleCategory;
 import today.opai.api.interfaces.EventHandler;
 import today.opai.api.interfaces.modules.PresetModule;
 import today.opai.api.interfaces.Registerable;
 import today.opai.api.interfaces.modules.Value;
-
+import static tech.Jiaxing.OpaiProExtension.openAPI;
+import static today.opai.api.Extension.getAPI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,7 +49,9 @@ public abstract class ExtensionModule implements PresetModule, Registerable {
             this.enabled = enabled;
             if (enabled) {
                 onEnabled();
-            } else onDisabled();
+            } else {
+                onDisabled();
+            }
         }
         this.enabled = enabled;
     }

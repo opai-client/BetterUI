@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BasicUI">
+    <output-path>$PROJECT_DIR$/out/artifacts/BasicUI</output-path>
+    <root id="archive" name="BasicUI.jar">
+      <element id="module-output" name="OpaiPro-main" />
+    </root>
+  </artifact>
+</component>

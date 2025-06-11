@@ -4,6 +4,8 @@ import today.opai.api.dataset.RotationData;
 import today.opai.api.enums.EnumNotificationType;
 import today.opai.api.events.*;
 import today.opai.api.interfaces.modules.PresetModule;
+import static tech.Jiaxing.OpaiProExtension.openAPI;
+import static today.opai.api.Extension.getAPI;
 
 /**
  * Interface for handling game events.
