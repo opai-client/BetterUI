@@ -1,4 +1,4 @@
-#  OpaiPro
+#  BasicUI
 ## a extension for Opai Client
 A extension implementation with [opensource-components](https://github.com/opai-client/opensource-components) for Opai Client
 
