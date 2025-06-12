@@ -13,6 +13,8 @@ import java.awt.*;
 import java.io.InputStream;
 
 public interface RenderUtil {
+
+
     Image createImage(byte[] data);
 
     Image createImage(InputStream data);
@@ -64,4 +66,6 @@ public interface RenderUtil {
     float getPartialTicks();
 
     void drawBoundingBox(BoundingBox boundingBox,Color color);
+
+
 }

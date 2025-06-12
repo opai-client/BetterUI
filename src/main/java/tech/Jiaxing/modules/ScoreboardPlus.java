@@ -4,17 +4,23 @@ import today.opai.api.enums.EnumModuleCategory;
 import today.opai.api.features.ExtensionModule;
 import today.opai.api.interfaces.EventHandler;
 import today.opai.api.interfaces.modules.Value;
+import today.opai.api.interfaces.modules.values.BooleanValue;
+import today.opai.api.interfaces.modules.values.ModeValue;
 import today.opai.api.interfaces.modules.values.MultiBooleanValue;
 
 import static tech.Jiaxing.OpaiProExtension.openAPI;
+import static today.opai.api.Extension.getAPI;
 
-public class ClassicalScoreboard extends ExtensionModule implements EventHandler {
-    public static ClassicalScoreboard INSTANCE;
+public class ScoreboardPlus extends ExtensionModule implements EventHandler {
+    public static ScoreboardPlus INSTANCE;
     private boolean state;
-    public ClassicalScoreboard() {
-        super("ClassicalScoreboard", "A Classical scoreboard implementation", EnumModuleCategory.VISUAL);
+    public static ModeValue Mode = openAPI.getValueManager().createModes("Mode", "Classical",new String[]{"Classical","Modern"});
+
+    public ScoreboardPlus() {
+        super("ScoreboardPlus", "ScoreboardPlus", EnumModuleCategory.VISUAL);
         setEventHandler(this);
         INSTANCE = this;
+        addValues(Mode);
     }
 
     @Override
@@ -60,4 +66,6 @@ public class ClassicalScoreboard extends ExtensionModule implements EventHandler
     public boolean isHidden() {
         return true;
     }
+
+
 }

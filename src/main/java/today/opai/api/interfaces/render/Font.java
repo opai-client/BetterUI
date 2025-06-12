@@ -1,5 +1,7 @@
 package today.opai.api.interfaces.render;
 
+import java.awt.*;
+
 public interface Font {
     float drawString(String text, double x, double y, int color);
 
@@ -14,4 +16,7 @@ public interface Font {
     int getHeight();
 
     void close();
+
+
 }
+

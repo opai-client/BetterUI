@@ -7,17 +7,15 @@ import today.opai.api.events.EventRender2D;
 import today.opai.api.events.EventRender3D;
 import today.opai.api.features.ExtensionModule;
 import today.opai.api.interfaces.EventHandler;
-import today.opai.api.interfaces.game.entity.Entity;
-import today.opai.api.interfaces.game.entity.LivingEntity;
 import today.opai.api.interfaces.game.entity.Player;
-import today.opai.api.interfaces.modules.Value;
 import today.opai.api.interfaces.modules.values.BooleanValue;
-import today.opai.api.interfaces.modules.values.NumberValue;
 import today.opai.api.interfaces.render.RenderUtil;
 
 import java.awt.*;
+
 import static tech.Jiaxing.OpaiProExtension.openAPI;
 import static today.opai.api.Extension.getAPI;
+
 /**
  * @Author renjun
  * @Date 2025/6/12 03:40
@@ -25,44 +23,73 @@ import static today.opai.api.Extension.getAPI;
  */
 public class classicalNameTags extends ExtensionModule implements EventHandler {
     public static classicalNameTags INSTANCE;
-    private final BooleanValue self = openAPI.getValueManager().createBoolean("self",true);
+    private final BooleanValue showSelf = openAPI.getValueManager().createBoolean("Show Self", true);
 
     public classicalNameTags() {
-        super("ClassicalNameTags", "NameTags0", EnumModuleCategory.VISUAL);
+        super("ClassicalNameTags", "ClassicalNameTags", EnumModuleCategory.VISUAL);
         INSTANCE = this;
-        addValues(self);
+        addValues(showSelf);
         setEventHandler(this);
     }
-    @Override
-    public void onRender2D(EventRender2D e) {
 
-    }
+
+    @Override
     public void onRender3D(EventRender3D event) {
-        for (Player e : OpaiProExtension.openAPI.getWorld().getLoadedPlayerEntities()) {
-            if (e.getEntityId() != OpaiProExtension.openAPI.getLocalPlayer().getEntityId() || ((Boolean) this.self.getValue()).booleanValue()) {
-                double x = (e.getLastTickPosition().getX() + ((e.getPosition().getX() - e.getLastTickPosition().getX()) * event.getRenderPartialTicks())) - OpaiProExtension.openAPI.getLocalPlayer().getViewPosition().getX();
-                double y = (e.getLastTickPosition().getY() + ((e.getPosition().getY() - e.getLastTickPosition().getY()) * event.getRenderPartialTicks())) - OpaiProExtension.openAPI.getLocalPlayer().getViewPosition().getY();
-                double z = (e.getLastTickPosition().getZ() + ((e.getPosition().getZ() - e.getLastTickPosition().getZ()) * event.getRenderPartialTicks())) - OpaiProExtension.openAPI.getLocalPlayer().getViewPosition().getZ();
-                OpaiProExtension.openAPI.getGLStateManager().pushMatrix();
-                double r = e.getHealth() / e.getMaxHealth();
-                int width = (int) (74.0d * r);
-                int c = r < 0.3d ? Color.red.getRGB() : r < 0.5d ? Color.orange.getRGB() : r < 0.7d ? Color.yellow.getRGB() : Color.green.getRGB();
-                GL11.glTranslated(x, y +2.3d, z);
-                GL11.glRotated(-OpaiProExtension.openAPI.getLocalPlayer().getPlayerViewY(), 0.0d, 1.0d, 0.0d);
-                OpaiProExtension.openAPI.getGLStateManager().disableDepth();
-                GL11.glScalef(0.03f, 0.03f, 0.03f);
-                openAPI.getFontUtil().getVanillaFont().drawString(e.getDisplayName(),(-37+74)/2-(getAPI().getFontUtil().getVanillaFont().getWidth(e.getDisplayName())),2,Color.WHITE.getRGB());
-                OpaiProExtension.openAPI.getRenderUtil().drawRect(-37.0f, -3.0f, 74.0f, 5.0f, Color.black);
-                OpaiProExtension.openAPI.getRenderUtil().drawRect(width - 37.0f, -2.0f, 74 - width, 3.0f, Color.darkGray);
-                OpaiProExtension.openAPI.getRenderUtil().drawRect(-37.0f, -2.0f, width, 3.0f, new Color(c));
-                OpaiProExtension.openAPI.getGLStateManager().enableDepth();
-                OpaiProExtension.openAPI.getGLStateManager().popMatrix();
+        for (Player player : openAPI.getWorld().getLoadedPlayerEntities()) {
+            if (player.getEntityId() != openAPI.getLocalPlayer().getEntityId() || showSelf.getValue()) {
+                renderNameTag(player, event);
             }
         }
     }
 
+    private void renderNameTag(Player player, EventRender3D event) {
+        // 计算玩家的相对位置
+        double x = calculatePosition(player.getLastTickPosition().getX(),
+                player.getPosition().getX(),
+                event.getRenderPartialTicks()) -
+                openAPI.getLocalPlayer().getViewPosition().getX();
 
+        double y = calculatePosition(player.getLastTickPosition().getY(),
+                player.getPosition().getY(),
+                event.getRenderPartialTicks()) -
+                openAPI.getLocalPlayer().getViewPosition().getY() + 2.3;
 
+        double z = calculatePosition(player.getLastTickPosition().getZ(),
+                player.getPosition().getZ(),
+                event.getRenderPartialTicks()) -
+                openAPI.getLocalPlayer().getViewPosition().getZ();
 
+        openAPI.getGLStateManager().pushMatrix();
 
+        float healthRatio = player.getHealth() / player.getMaxHealth();
+        int healthBarWidth = (int) (74 * healthRatio);
+        int healthColor = getHealthColor(healthRatio);
+
+        GL11.glTranslated(x, y, z);
+        GL11.glRotated(-openAPI.getLocalPlayer().getPlayerViewY(), 0, 1, 0);
+        openAPI.getGLStateManager().disableDepth();
+        GL11.glScalef(0.03f, 0.03f, 0.03f);
+
+        String displayName = player.getDisplayName();
+        int textX = (74 - getAPI().getFontUtil().getVanillaFont().getWidth(displayName)) / 2 - 37;
+        getAPI().getFontUtil().getVanillaFont().drawString(displayName, textX, 2, Color.WHITE.getRGB());
+
+        openAPI.getRenderUtil().drawRect(-37, -3, 74, 5, Color.BLACK);
+        openAPI.getRenderUtil().drawRect(healthBarWidth - 37, -2, 74 - healthBarWidth, 3, Color.DARK_GRAY);
+        openAPI.getRenderUtil().drawRect(-37, -2, healthBarWidth, 3, new Color(healthColor));
+
+        openAPI.getGLStateManager().enableDepth();
+        openAPI.getGLStateManager().popMatrix();
+    }
+
+    private double calculatePosition(double lastPos, double currentPos, float partialTicks) {
+        return lastPos + (currentPos - lastPos) * partialTicks;
+    }
+
+    private int getHealthColor(float healthRatio) {
+        if (healthRatio < 0.3f) return Color.RED.getRGB();
+        if (healthRatio < 0.5f) return Color.ORANGE.getRGB();
+        if (healthRatio < 0.7f) return Color.YELLOW.getRGB();
+        return Color.GREEN.getRGB();
+    }
 }

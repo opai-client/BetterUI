@@ -16,69 +16,95 @@ import static tech.Jiaxing.OpaiProExtension.openAPI;
 import static today.opai.api.Extension.getAPI;
 
 public class BasicUI extends ExtensionModule implements EventHandler {
-    OpaiProExtension opaiProExtension;
     public static BasicUI INSTANCE;
-    public final BooleanValue simpleBlockCount = getAPI().getValueManager().createBoolean("simpleBlockCount",false);
-    public final BooleanValue Notification = getAPI().getValueManager().createBoolean("Notification",false);
-    public final BooleanValue INFO = getAPI().getValueManager().createBoolean("Info",false);
-    public final BooleanValue Text = getAPI().getValueManager().createBoolean("Text",false);
-    public final TextValue ClientValue = getAPI().getValueManager().createInput("ClientName", "SilenceFix");
-    public final NumberValue x = getAPI().getValueManager().createDouble("X", 3, 0, 10, 1);
-    public final NumberValue y = getAPI().getValueManager().createDouble("Y", 3, 0, 10, 1);
-    public final BooleanValue rainbow = getAPI().getValueManager().createBoolean("Rainbow",false);
-    PresetModule sca = getAPI().getModuleManager().getModule("Scaffold");
+    private final BooleanValue showBlockCount = getAPI().getValueManager().createBoolean("Show Block Count", false);
+    private final BooleanValue showInfo = getAPI().getValueManager().createBoolean("Show Info", false);
+    private final BooleanValue showText = getAPI().getValueManager().createBoolean("Show Text", false);
+    private final TextValue clientName = getAPI().getValueManager().createInput("Client Name", "SilenceFix");
+    private final NumberValue positionX = getAPI().getValueManager().createDouble("X", 3, 0, 10, 1);
+    private final NumberValue positionY = getAPI().getValueManager().createDouble("Y", 3, 0, 10, 1);
+    private final BooleanValue useRainbow = getAPI().getValueManager().createBoolean("Rainbow", false);
+    public final ColorValue colorValue = openAPI.getValueManager().createColor("Color", Color.WHITE);
+    private final PresetModule scaffoldModule = getAPI().getModuleManager().getModule("Scaffold");
+
 
     public BasicUI() {
-        super("BasicUI","Some UI",EnumModuleCategory.VISUAL);
+        super("SimpleUI", "显示各种UI信息", EnumModuleCategory.VISUAL);
         setEventHandler(this);
-        super.addValues(/*MODULELIST,LR,spacing,*/simpleBlockCount,INFO,Text,ClientValue, x, y,rainbow);
+        super.addValues(showBlockCount, showInfo, showText, clientName, positionX, positionY, useRainbow,colorValue);
         INSTANCE = this;
     }
+
     @Override
-    public void onRender2D(EventRender2D e) {
-        int color = ColorUtil.BaseColor(rainbow.getValue().booleanValue());
-//
-        if (simpleBlockCount.getValue()&&sca.isEnabled()){
-            int blocks = countBlocks();;
-           getAPI().getFontUtil().getVanillaFont().drawString(String.valueOf(blocks)+" Blocks", (double) e.getWindowResolution().getWidth() /2+1, (double) e.getWindowResolution().getHeight() /2+1,Color.WHITE.getRGB());
+    public void onRender2D(EventRender2D event) {
+        int color = ColorUtil.BaseColor(useRainbow.getValue(),colorValue.getValue());
+        if (showBlockCount.getValue() && scaffoldModule.isEnabled()) {
+            drawBlockCount(event);
         }
 
-        if (INFO.getValue()) {
-
-
-            String rightText = "[release] B" + openAPI.getClientVersion() + " [" + openAPI.getClientUsername() + "] ";
-            if (openAPI.getLocalPlayer() != null) {
-                String text = " X " + (int) openAPI.getLocalPlayer().getPosition().getX() + " Y " + (int) openAPI.getLocalPlayer().getPosition().getY() + " Z " + (int) openAPI.getLocalPlayer().getPosition().getZ();
-                openAPI.getFontUtil().getVanillaFont().drawStringWithShadow(text, 0, (e.getWindowResolution().getHeight() - openAPI.getFontUtil().getVanillaFont().getHeight()), color);
-                openAPI.getFontUtil().getVanillaFont().drawStringWithShadow(rightText, e.getWindowResolution().getWidth() - openAPI.getFontUtil().getVanillaFont().getWidth(rightText), (e.getWindowResolution().getHeight() - openAPI.getFontUtil().getVanillaFont().getHeight()), color);
-
-            }
-
+        if (showInfo.getValue() && openAPI.getLocalPlayer() != null) {
+            drawPlayerInfo(event);
         }
-        if (Text.getValue()) {
 
-            String sprint = "Sprinting";
-            if (openAPI.getLocalPlayer().isSprinting()) {
-                sprint = "Sprinting";
-            } else {
-                sprint = "UnSprinting";
-            }
-            int fps = openAPI.getFrameRate();
-            String text = ClientValue.getValue() + " [B"
-                    + openAPI.getClientVersion()
-                    + "] [" + fps
-                    + "fps] ["
-                    + sprint
-                    + "]";
-            openAPI.getFontUtil().getVanillaFont().drawStringWithShadow(text, x.getValue(), y.getValue(), color);
-
-
+        if (showText.getValue() && openAPI.getLocalPlayer() != null) {
+            drawClientText(event);
         }
     }
-    private int countBlocks(){
+
+    private void drawBlockCount(EventRender2D event) {
+        int blocks = countBlocks();
+        getAPI().getFontUtil().getVanillaFont().drawString(
+                blocks + " Blocks",
+                event.getWindowResolution().getWidth() / 2 + 1,
+                event.getWindowResolution().getHeight() / 2 + 1,
+                Color.WHITE.getRGB()
+        );
+    }
+
+    private void drawPlayerInfo(EventRender2D event) {
+        int color = ColorUtil.BaseColor(useRainbow.getValue(),colorValue.getValue());
+        String positionInfo = " X " + (int) openAPI.getLocalPlayer().getPosition().getX() +
+                " Y " + (int) openAPI.getLocalPlayer().getPosition().getY() +
+                " Z " + (int) openAPI.getLocalPlayer().getPosition().getZ();
+
+        String versionInfo = "[release] B" + openAPI.getClientVersion() +
+                " [" + openAPI.getClientUsername() + "] ";
+
+        getAPI().getFontUtil().getVanillaFont().drawStringWithShadow(
+                positionInfo,
+                0,
+                event.getWindowResolution().getHeight() - getAPI().getFontUtil().getVanillaFont().getHeight(),
+                color
+        );
+
+        getAPI().getFontUtil().getVanillaFont().drawStringWithShadow(
+                versionInfo,
+                event.getWindowResolution().getWidth() - getAPI().getFontUtil().getVanillaFont().getWidth(versionInfo),
+                event.getWindowResolution().getHeight() - getAPI().getFontUtil().getVanillaFont().getHeight(),
+                color
+        );
+    }
+
+    private void drawClientText(EventRender2D event) {
+        int color = ColorUtil.BaseColor(useRainbow.getValue(),colorValue.getValue());
+        String sprintStatus = openAPI.getLocalPlayer().isSprinting() ? "Sprinting" : "UnSprinting";
+        int fps = openAPI.getFrameRate();
+
+        String clientText = clientName.getValue() + " [B" + openAPI.getClientVersion() +
+                "] [" + fps + "fps] [" + sprintStatus + "]";
+
+        getAPI().getFontUtil().getVanillaFont().drawStringWithShadow(
+                clientText,
+                positionX.getValue(),
+                positionY.getValue(),
+                color
+        );
+    }
+
+    private int countBlocks() {
         int count = 0;
         for (ItemStack itemStack : openAPI.getLocalPlayer().getInventory().getMainInventory()) {
-            if(itemStack == null) continue;
+            if (itemStack == null) continue;
             if (itemStack.getName().contains("tile.") ||
                     itemStack.getName().contains("block.") ||
                     itemStack.getName().contains("minecraft:")) {

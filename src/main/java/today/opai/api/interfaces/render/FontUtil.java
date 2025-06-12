@@ -1,9 +1,14 @@
 package today.opai.api.interfaces.render;
 
+import tech.Jiaxing.OpaiProExtension;
+
 import java.io.File;
 import java.io.InputStream;
 
+import static today.opai.api.Extension.getAPI;
+
 public interface FontUtil {
+
     /**
      * Creates a true type font (.ttf) from an input stream.
      *
@@ -44,4 +49,11 @@ public interface FontUtil {
     Font getProduct18();
 
     Font getTahoma18();
+
+//    default Font getNormal18(){
+//        return OpaiProExtension.normalfont18;
+//    };
+
+
+
 }

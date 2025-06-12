@@ -18,13 +18,13 @@ import java.util.List;
 @Setter
 public abstract class ExtensionModule implements PresetModule, Registerable {
     private final String name;
-    private final String description;
-    private String suffix;
-    private final EnumModuleCategory category;
-    private int key;
-    private boolean enabled, hidden;
-    private EventHandler eventHandler;
-    private final List<Value<?>> values = new ArrayList<>();
+    public final String description;
+    public String suffix;
+    public final EnumModuleCategory category;
+    public int key;
+    public boolean enabled, hidden;
+    public EventHandler eventHandler;
+    public final List<Value<?>> values = new ArrayList<>();
 
     public ExtensionModule(String name, String description, EnumModuleCategory category) {
         this.name = name;
