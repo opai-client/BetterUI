@@ -1,28 +1,34 @@
-#  BasicUI
+#  BetterUI
 ## a extension for Opai Client
 A extension implementation with [opensource-components](https://github.com/opai-client/opensource-components) for Opai Client
 
-**Features**
+## Features
+**SimpleUI**
 - **Text**: show text in game
 - **Info**: Show some info from your game
 - **SimpleBlockCount**: show BlockCount
 - **ClasicalNameTags**: show NameTags
-- **ServerIPSpoof**: Spoof hacking in 花雨庭
-
+- **ClassicalScoreboard**: More ClassicalScoreboard Style
+**ModernUI**
+  - **WaterMark**: Watermark like Mugen Client
+  - **ModernModuleList**: ModuleList like Mugen Client
+  - **ModernScoreboard**: More ModernScoreboard Style
 ## Screenshots
-- **Basic UI Module**
 
-![7](https://github.com/user-attachments/assets/062c9047-f92a-4c3b-b444-f2f19ff9c1cf)
+## SimpleUI
 
+- **Simple UI Module**
+
+![SimpleUIModule](https://github.com/user-attachments/assets/92e9aeef-0fa2-4ffe-a5d5-8b1519c26c0c)
 
 - **Text**
 
-![Text](https://github.com/user-attachments/assets/b50a9eb3-88dd-4cdc-b1ec-bd04a93af1b1)
+![22](https://github.com/user-attachments/assets/d6d4f6d1-9ff6-46ba-b802-033726e8cfde)
 
 
 - **Info**
-![Info](https://github.com/user-attachments/assets/43716409-a29a-4322-9f63-de99d0603b60)
 
+![Info](https://github.com/user-attachments/assets/012b11dd-f647-423a-9823-86834fb16161)
 
 - **simpleBlockCount**
 
@@ -35,7 +41,7 @@ A extension implementation with [opensource-components](https://github.com/opai-
 ![9](https://github.com/user-attachments/assets/5a6ba4f1-c26e-4191-ad5d-c9eb5657a0fd)
 
 
-- **Scoreboard Spoof**
+- **MoreClassicalScoreboard**
 
 ![55](https://github.com/user-attachments/assets/85e6cfb5-9e3d-4d74-bbeb-905cd147dfbb)
 
@@ -43,3 +49,25 @@ A extension implementation with [opensource-components](https://github.com/opai-
 - **All**
 
 ![8](https://github.com/user-attachments/assets/3e0443d6-86c4-47ad-b730-1611cb276dbf)
+
+## ModernUI
+
+- **Modern UI Module**
+
+![ModernUIModule](https://github.com/user-attachments/assets/4d85556d-8bd9-48d9-88e3-0fef45967142)
+
+- **WaterMark**
+
+![WaterMark](https://github.com/user-attachments/assets/fac5d4e8-02fc-4176-a1db-0e63e7163867)
+
+- **ModernModuleList**
+
+![ModernModuleList](https://github.com/user-attachments/assets/4b29327a-3ca5-4f7d-b937-e29ec0175c5d)
+
+- **ModernScoreboard**
+
+![ModernScoreboard](https://github.com/user-attachments/assets/cddaeff8-274b-46b5-babe-fb669879cb27)
+
+- **All**
+
+![ModernAll](https://github.com/user-attachments/assets/23528903-9a8b-4cc6-9ee5-e559c094a8b1)
